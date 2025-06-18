@@ -1,0 +1,29 @@
+{
+    "name": "EnhancedAttribution",
+    "description": "Enhanced attribution tracking and goal URL analysis",
+    "version": "1.0",
+    "theme": false,
+    "require": {
+        "matomo": ">=4.0.0,<6.0.0"
+    },
+    "authors": [
+        {
+            "name": "Matomo",
+            "email": "",
+            "homepage": ""
+        }
+    ],
+    "support": {
+        "email": "",
+        "issues": "",
+        "forum": "",
+        "irc": "",
+        "wiki": "",
+        "source": "",
+        "docs": "",
+        "rss": ""
+    },
+    "homepage": "",
+    "license": "GPL v3+",
+    "keywords": []
+}

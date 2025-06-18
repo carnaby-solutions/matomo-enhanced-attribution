@@ -1,0 +1,87 @@
+# Matomo Plugin .gitignore
+
+# Matomo core files (if accidentally copied)
+/config/
+/core/
+/js/
+/libs/
+/misc/
+/plugins/*/
+!/plugins/YourPluginName/
+/vendor/
+/tmp/
+/lang/
+
+# Matomo configuration and sensitive files
+config.ini.php
+global.ini.php
+
+# Database files
+*.db
+*.sqlite
+
+# Log files
+*.log
+/logs/
+
+# Cache and temporary files
+/tmp/
+/cache/
+*.tmp
+*.temp
+
+# Build and distribution files
+/build/
+/dist/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# PHP specific
+composer.phar
+/vendor/
+.phpunit.result.cache
+
+# Testing
+/tests/coverage/
+phpunit.xml
+.phpunit.cache
+
+# Plugin specific generated files
+*.min.js
+*.min.css
+/screenshots/processed/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment and local configuration
+.env
+.env.local
+.env.*.local
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
