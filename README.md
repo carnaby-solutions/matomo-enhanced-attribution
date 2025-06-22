@@ -69,9 +69,9 @@ Returns detailed goal URL data with visitor information and segment support.
     "visitor_returning": "returning",
     "location_country": "se",
     "location_city": "Stockholm",
-    "config_os": "Windows",
-    "config_browser_name": "Chrome",
-    "config_device_type": "desktop"
+    "config_os": "WIN",
+    "config_browser_name": "CH",
+    "config_device_type": "0"
   },
   {
     "conversion_url": "https://carnaby.se/newsletter/signup",
@@ -90,9 +90,9 @@ Returns detailed goal URL data with visitor information and segment support.
     "visitor_returning": "new",
     "location_country": "us",
     "location_city": "New York",
-    "config_os": "Mac OS X",
-    "config_browser_name": "Safari",
-    "config_device_type": "desktop"
+    "config_os": "MAC",
+    "config_browser_name": "SF",
+    "config_device_type": "0"
   },
   {
     "conversion_url": "https://carnaby.se/contact/form-submitted",
@@ -111,9 +111,9 @@ Returns detailed goal URL data with visitor information and segment support.
     "visitor_returning": "returning",
     "location_country": "gb",
     "location_city": "London",
-    "config_os": "iOS",
-    "config_browser_name": "Mobile Safari",
-    "config_device_type": "smartphone"
+    "config_os": "IOS",
+    "config_browser_name": "MF",
+    "config_device_type": "1"
   }
 ]
 ```

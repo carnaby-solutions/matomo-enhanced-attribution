@@ -1,7 +1,7 @@
 {
     "name": "EnhancedAttribution",
     "description": "Enhanced attribution tracking and goal URL analysis",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "theme": false,
     "require": {
         "matomo": ">=4.0.0,<6.0.0"

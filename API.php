@@ -1,8 +1,8 @@
 <?php
 /**
- * Matomo - free/libre analytics platform
+ *  Enhanced Attribution API
  *
- * @link https://matomo.org
+ * @link  https://www.carnaby.se/matomo-enhanced-attribution/
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  *
  */
