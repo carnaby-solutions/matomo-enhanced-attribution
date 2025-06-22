@@ -1,29 +1,25 @@
 {
     "name": "EnhancedAttribution",
     "description": "Enhanced attribution tracking and goal URL analysis",
-    "version": "1.0",
+    "version": "1.0.1",
     "theme": false,
     "require": {
         "matomo": ">=4.0.0,<6.0.0"
     },
     "authors": [
         {
-            "name": "Matomo",
-            "email": "",
-            "homepage": ""
+            "name": "Carnaby Solutions AB",
+            "email": "christian@carnaby.se",
+            "homepage": "https://www.carnaby.se/"
         }
     ],
     "support": {
-        "email": "",
-        "issues": "",
-        "forum": "",
-        "irc": "",
-        "wiki": "",
-        "source": "",
-        "docs": "",
-        "rss": ""
+        "email": "support@carnaby.se",
+        "issues": "https://github.com/carnaby/matomo-enhanced-attribution/issues",
+        "source": "https://github.com/carnaby-solutions/matomo-enhanced-attribution",
+        "docs": "https://github.com/carnaby-solutions/matomo-enhanced-attribution/tree/main/docs",
     },
-    "homepage": "",
+    "homepage": "https://www.carnaby.se/matomo-enhanced-attribution/",
     "license": "GPL v3+",
-    "keywords": []
+    "keywords": ["attribution", "goal", "url", "analysis", "tracking","conversion","marketing"]
 }

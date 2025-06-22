@@ -1,13 +1,15 @@
 # Matomo EnhancedAttribution Plugin
 
+https://www.carnaby.se/matomo-enhanced-attribution/
+
 ## Description
 
-Enhanced attribution tracking and goal URL analysis with comprehensive archiving support. This plugin provides detailed visitor attribution data, performance optimization, and modern Matomo archiving capabilities for goal conversions.
+Enhanced attribution tracking and goal URL analysis. 
 
 ## Features
 
-- **Enhanced Goal URL Analysis**: Detailed tracking of goal conversion URLs with comprehensive visitor data
-- **Visitor Attribution**: Track visitor behavior including return visits, session counts, and conversion paths
+- **Enhanced Goal URL Analysis**: Detailed tracking of goal conversion URLs with visitor data
+- **Visitor Attribution**: Indicator for return visits, source, medium & channel 
 - **Geographic Data**: Country, region, and city information for goal conversions
 - **Technical Information**: Operating system, browser, device type, and screen resolution data
 
@@ -144,10 +146,6 @@ Performance testing command for goal URL queries.
 ```bash
 ./console enhancedattribution:test-goalurls-performance
 ```
-
-## Archiving
-
-The plugin uses Matomo's modern record builder architecture with the `GoalUrlAggregator` class to efficiently process and store goal conversion data during the archiving process.
 
 ## Development
 
