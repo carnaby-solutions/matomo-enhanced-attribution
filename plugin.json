@@ -22,5 +22,8 @@
     "homepage": "https://www.carnaby.se/matomo-enhanced-attribution/",
     "license": "GPL-3.0+",
     "keywords": ["attribution", "goal", "url", "analysis", "tracking","conversion","marketing","analytics"],
-    "category": "insights"
+    "category": "insights",
+    "archive": {
+       "exclude": ["/dev", "/test.log"]
+    }
 }
