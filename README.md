@@ -118,16 +118,6 @@ Returns detailed goal URL data with visitor information and segment support.
 ]
 ```
 
-### getGoalUrlsAggregate
-
-Returns aggregated goal URL data from archived records.
-
-**Parameters:**
-- `idSite` (int): Site ID
-- `period` (string): Period type
-- `date` (string): Date or date range
-- `segment` (string, optional): Matomo segment definition
-
 ## Data Fields
 
 The plugin enriches goal conversion data with the following fields:
