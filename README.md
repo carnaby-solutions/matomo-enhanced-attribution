@@ -124,6 +124,15 @@ Performance testing command for goal URL queries.
 
 ## Development
 
+### Code linting 
+
+Composer is setup to support [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer), a powerful and widely-used tool, to automatically format code and 
+ensure it adheres to modern coding standards like PSR-12.
+
+`composer format` – This will automatically fix the coding style of your entire project.
+`composer check-style` – This will show you which files need formatting without actually modifying them, which is useful for continuous integration (CI) checks.
+
+
 ### File Structure
 
 - `EnhancedAttribution.php` - Main plugin class with event registration
