@@ -1,0 +1,21 @@
+# phpstan.neon
+includes:
+    - ../../.phpstan.neon
+
+
+parameters:
+    # The level of analysis, 0 is the loosest, 9 is the strictest. 5 is a good start.
+    level: 5
+
+    # Paths to analyse
+    paths:
+        - .
+
+    # Exclude paths
+    excludePaths:
+        - vendor
+
+    # This is the MOST IMPORTANT part.
+    # You MUST provide the relative path from your plugin directory to the main Matomo root directory.
+#    matomo:
+#        main-matomo-path: ../../..

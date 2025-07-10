@@ -1,0 +1,21 @@
+{
+    "name": "carnaby/enhanced-attribution",
+    "description": "Enhanced attribution tracking with goal URL analysis",
+    "type": "matomo-plugin",
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.82",
+        "phpstan/phpstan": "^2.1",
+        "enlightn/security-checker": "^2.0"
+    },
+    "license": "GPLv3+",
+   "scripts": {
+        "format": "./vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "check-style": "./vendor/bin/php-cs-fixer fix --dry-run --allow-risky=yes"
+    },
+    "authors": [
+        {
+            "name": "Christian Bolstad",
+            "email": "christian@carnaby.se"
+        }
+    ]
+}
