@@ -4,7 +4,13 @@ https://www.carnaby.se/matomo-enhanced-attribution/
 
 ## Description
 
-Enhanced attribution tracking and goal URL analysis. 
+Ever wondered what part of the site converts best? Or what combination of content and traffic source generates the most
+valuable visitors?
+
+The Enhanced Attribution plugin for Matomo provides insights into goal conversions by combining goal URLs
+with visitor (device type & location) and traffic source data (source, medium, campaign.
+
+Fetch the data via Matomo's API for detailed analysis or view the web report for quick insights.
 
 ## Features
 
@@ -15,7 +21,7 @@ Enhanced attribution tracking and goal URL analysis.
 
 ## Requirements
 
-- Matomo 4.0.0 or higher (compatible up to Matomo 6.0.0)
+- Matomo 5 or higher (compatible up to Matomo 6.0.0)
 - PHP 7.4 or higher
 - MySQL/MariaDB database
 
@@ -53,28 +59,7 @@ Returns detailed goal URL data with visitor information and segment support.
 ```json
 [
   {
-    "label": "https://carnaby.se/checkout/success",
-    "channel": "campaign",
-    "source": "google",
-    "campaign_medium": "cpc",
-    "campaign_name": "summer_sale_2025",
-    "goal_id": "1",
-    "goal_name": "Purchase Completed",
-    "server_time": "2025-05-15 14:32:18",
-    "date_s": "2025-05-15",
-    "time_s": "14:32:18",
-    "idvisit": "12345",
-    "idvisitor": "a1b2c3d4e5f6789",
-    "visitor_count_visits": "3",
-    "visitor_returning": "returning",
-    "location_country": "se",
-    "location_city": "Stockholm",
-    "config_os": "WIN",
-    "config_browser_name": "CH",
-    "config_device_type": "0"
-  },
-  {
-    "conversion_url": "https://carnaby.se/newsletter/signup",
+    "conversion_url": "https://carnaby.se/blog/google-this-and-that/",
     "channel": "social",
     "source": "facebook",
     "campaign_medium": "",
@@ -95,7 +80,7 @@ Returns detailed goal URL data with visitor information and segment support.
     "config_device_type": "0"
   },
   {
-    "conversion_url": "https://carnaby.se/contact/form-submitted",
+    "conversion_url": "https://carnaby.se/article/vector-databases/",
     "channel": "direct",
     "source": "-",
     "campaign_medium": "",
@@ -143,8 +128,6 @@ Performance testing command for goal URL queries.
 
 - `EnhancedAttribution.php` - Main plugin class with event registration
 - `API.php` - API methods for data retrieval
-- `Archiver.php` - Legacy archiver (deprecated, replaced by record builders)
-- `RecordBuilders/GoalUrlAggregator.php` - Modern archiving logic
 - `Commands/TestGoalUrlsPerformance.php` - Performance testing command
 
 ### Database Tables
