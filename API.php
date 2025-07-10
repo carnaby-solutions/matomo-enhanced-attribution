@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  *
  */
+
 namespace Piwik\Plugins\EnhancedAttribution;
 
 use Piwik\DataTable;
@@ -70,7 +71,7 @@ class API extends \Piwik\Plugin\API
 
     /**
      * Get goal URLs detailed with visit data and segment support
-     * @param int    $idSite
+     * @param int $idSite
      * @param string $period
      * @param string $date
      * @param bool|string $segment
@@ -79,11 +80,11 @@ class API extends \Piwik\Plugin\API
      */
     public function getGoalUrlsDetailed($idSite, $period, $date, $segment = false, $limit = 0)
     {
- 
+
         list($startDate, $endDate) = $this->getDateRangeForPeriod($date, $period, false);
         $startDateStr = $startDate->toString();
         $endDateStr = $endDate->toString();
-        
+
         // Check for common request parameters that might limit results
         $filterLimit = Common::getRequestVar('filter_limit', -1, 'int');
         if ($filterLimit > 0) {
@@ -118,17 +119,15 @@ class API extends \Piwik\Plugin\API
                 ORDER BY c.server_time DESC' . ($limit > 0 ? ' LIMIT ' . (int)$limit : '');
 
         $bind = array($idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59');
- 
 
 
         $rows = Db::fetchAll($sql, $bind);
 
 
+        $sql = 'SELECT idgoal, name, idsite FROM '
+            . Common::prefixTable('goal') . " WHERE idsite = ? ";
 
-        $sql =  'SELECT idgoal, name, idsite FROM '
-            .  Common::prefixTable('goal') . " WHERE idsite = ? ";
-
-        $goalData= Db::fetchAll($sql, array($idSite));
+        $goalData = Db::fetchAll($sql, array($idSite));
         # print_r($goalData);
         $goals = array();
         foreach ($goalData as $sepGoal) {
@@ -137,27 +136,27 @@ class API extends \Piwik\Plugin\API
         }
 #        print_r($goals);
         $table = new DataTable();
-        
+
         // Cache channel matrix outside loop for performance
         $channelMatrix = array(
-            Common::REFERRER_TYPE_DIRECT_ENTRY   => 'direct',
-            Common::REFERRER_TYPE_SEARCH_ENGINE  => 'search',
-            Common::REFERRER_TYPE_CAMPAIGN       => 'campaign',
+            Common::REFERRER_TYPE_DIRECT_ENTRY => 'direct',
+            Common::REFERRER_TYPE_SEARCH_ENGINE => 'search',
+            Common::REFERRER_TYPE_CAMPAIGN => 'campaign',
             Common::REFERRER_TYPE_SOCIAL_NETWORK => 'social',
-            Common::REFERRER_TYPE_WEBSITE        => 'website',
+            Common::REFERRER_TYPE_WEBSITE => 'website',
         );
 
         foreach ($rows as $row) {
             // Optimize: only populate fields that have data, avoid massive empty array initialization
             $serverTime = $row['server_time'];
             $timestamp = strtotime($serverTime);
-            
+
             // Process current visit attribution first
             $source = '';
             $campaignMedium = '';
             $campaignName = '';
-            
-            switch($row['referer_type']) {
+
+            switch ($row['referer_type']) {
                 case Common::REFERRER_TYPE_DIRECT_ENTRY:
                     $source = '-';
                     break;
@@ -172,7 +171,7 @@ class API extends \Piwik\Plugin\API
                     $campaignName = $row['referer_name'] ?? '';
                     break;
             }
-            
+
             $returnData = array(
                 'conversion_url' => $row['url'],
                 'channel' => $channelMatrix[$row['referer_type']] ?? 'unknown',
@@ -195,25 +194,8 @@ class API extends \Piwik\Plugin\API
                 'config_device_type' => $row['config_device_type'] ?? ''
             );
 
-#           print_r($returnData);
-
-
             $table->addRowFromArray(array(Row::COLUMNS => $returnData));
         }
-
- #       die;
-#        $table->addRowFromArray(array(Row::COLUMNS => array('label'=>'https://www.exempel.org', 'cust_goals' => 33,'cust_source'=>'ex1','cust_medium' =>'ex2')));
-
-
-
- #       $subTable1 = new DataTable();
-
-#        $subTable1->addRowFromArray(array(Row::COLUMNS => array('label'=>'Superbra', 'cust_goals' => 321)));
-
-  #    $rowSub = new Row();
- #       $rowSub->setSubtable($subTable1);
- #       $table->addRow($rowSub);
-
 
         return $table;
     }
