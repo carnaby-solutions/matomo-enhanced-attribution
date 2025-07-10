@@ -10,7 +10,6 @@
 !/plugins/YourPluginName/
 /vendor/
 /tmp/
-/lang/
 
 # Matomo configuration and sensitive files
 config.ini.php
