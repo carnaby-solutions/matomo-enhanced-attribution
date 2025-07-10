@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  Enhanced Attribution Get Goal URLs Detailed
  *
@@ -29,9 +30,9 @@ class GetGoalUrlsDetailed extends Base
         $this->documentation = Piwik::translate('List goal urls');
 
 
-#        $this->actionToLoadSubTables = $this->action;
+        #        $this->actionToLoadSubTables = $this->action;
 
-        $toDisplay =     array_keys(array(
+        $toDisplay =     array_keys([
             'channel' => '',
             'source' => '',
             'campaign_medium' => '',
@@ -51,18 +52,18 @@ class GetGoalUrlsDetailed extends Base
             'config_os' => '',
             'config_browser_name' => '',
             'config_device_type' => ''
-        ));
+        ]);
 
 
         $this->order   = 2;
-        $this->metrics = array_merge($toDisplay,array('conversion_url'));
+        $this->metrics = array_merge($toDisplay, ['conversion_url']);
 
         // By default standard metrics are defined but you can customize them by defining an array of metric names
         // $this->metrics       = array('nb_visits', 'nb_hits');
 
         // Uncomment the next line if your report does not contain any processed metrics, otherwise default
         // processed metrics will be assigned
-       $this->processedMetrics =  array();
+        $this->processedMetrics =  [];
 
         // Uncomment the next line if your report defines goal metrics
         #´ $this->hasGoalMetrics = true;
@@ -95,20 +96,20 @@ class GetGoalUrlsDetailed extends Base
         // Configure display settings following Matomo standards
         $view->config->show_table_all_columns = true;
         $view->config->addTranslation('conversion_url', 'Conversion URL');
-        
+
         // Standard pagination controls (like Actions plugin)
         $view->config->show_limit_control = true;
         $view->config->show_pagination_control = true;
         $view->config->show_offset_information = true;
-        
+
         // Set default rows to display (following Actions plugin standard)
         $view->requestConfig->filter_limit = 100;
-        
+
         // Enable search and export functionality for large datasets
         $view->config->show_search = true;
         $view->config->show_export = true;
         $view->config->show_export_as_rss_feed = false;
-        
+
         // Add translations for new columns
         $view->config->addTranslation('visitor_count_visits', Piwik::translate('EnhancedAttribution_visitor_count_visits'));
         $view->config->addTranslation('visitor_returning', Piwik::translate('EnhancedAttribution_visitor_returning'));
@@ -118,9 +119,9 @@ class GetGoalUrlsDetailed extends Base
         $view->config->addTranslation('config_browser_name', Piwik::translate('EnhancedAttribution_config_browser_name'));
         $view->config->addTranslation('config_device_type', Piwik::translate('EnhancedAttribution_config_device_type'));
 
-#        $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
+        #        $view->config->columns_to_display = array_merge(array('label'), $this->metrics);
 
-        $toDisplay =     array_keys(array(
+        $toDisplay =     array_keys([
             'channel' => '',
             'source' => '',
             'campaign_medium' => '',
@@ -140,9 +141,9 @@ class GetGoalUrlsDetailed extends Base
             'config_os' => '',
             'config_browser_name' => '',
             'config_device_type' => ''
-        ));
+        ]);
 
-        $view->config->columns_to_display = array_merge(array('conversion_url'),  $toDisplay);
+        $view->config->columns_to_display = array_merge(['conversion_url'], $toDisplay);
 
     }
 
@@ -155,7 +156,7 @@ class GetGoalUrlsDetailed extends Base
      */
     public function getRelatedReports()
     {
-        return array(); // eg return array(new XyzReport());
+        return []; // eg return array(new XyzReport());
     }
 
     /**
