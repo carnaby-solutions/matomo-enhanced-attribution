@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matomo - free/libre analytics platform
  *
@@ -34,7 +35,7 @@ class TestGoalUrlsPerformance extends ConsoleCommand
     {
         $input = $this->getInput();
         $output = $this->getOutput();
-        
+
         $idSite = (int) $input->getOption('idsite');
         $date = $input->getOption('date');
         $period = $input->getOption('period');
@@ -56,51 +57,53 @@ class TestGoalUrlsPerformance extends ConsoleCommand
 
         for ($i = 1; $i <= $iterations; $i++) {
             $output->writeln("<comment>Iteration $i/$iterations</comment>");
-            
+
             // Memory usage before
             $memoryBefore = memory_get_usage(true);
             $peakBefore = memory_get_peak_usage(true);
-            
+
             // Time the API call
             $startTime = microtime(true);
-            
+
             try {
                 $result = $api->getGoalUrlsDetailed($idSite, $period, $date, $segment);
                 $endTime = microtime(true);
-                
+
                 $executionTime = $endTime - $startTime;
                 $totalTimes[] = $executionTime;
-                
+
                 // Memory usage after
                 $memoryAfter = memory_get_usage(true);
                 $peakAfter = memory_get_peak_usage(true);
-                
+
                 $rowCount = $result->getRowsCount();
                 $results[] = $rowCount;
-                
+
                 $output->writeln("  ✓ Execution time: " . number_format($executionTime * 1000, 2) . " ms");
                 $output->writeln("  ✓ Rows returned: $rowCount");
                 $output->writeln("  ✓ Memory used: " . $this->formatBytes($memoryAfter - $memoryBefore));
                 $output->writeln("  ✓ Peak memory: " . $this->formatBytes($peakAfter - $peakBefore));
-                
+
                 // Show first few URLs for verification
                 if ($i === 1 && $rowCount > 0) {
                     $output->writeln("  Sample URLs:");
                     $sampleCount = min(3, $rowCount);
                     foreach ($result->getRows() as $index => $row) {
-                        if ($index >= $sampleCount) break;
+                        if ($index >= $sampleCount) {
+                            break;
+                        }
                         $columns = $row->getColumns();
                         $output->writeln("    - " . ($columns['conversion_url'] ?? 'N/A'));
                     }
                 }
-                
+
             } catch (\Exception $e) {
                 $output->writeln("  ✗ Error: " . $e->getMessage());
                 return 1;
             }
-            
+
             $output->writeln('');
-            
+
             // Small delay between iterations to avoid overwhelming the system
             if ($i < $iterations) {
                 usleep(100000); // 100ms delay
@@ -119,7 +122,7 @@ class TestGoalUrlsPerformance extends ConsoleCommand
         $output->writeln("Minimum execution time: " . number_format($minTime * 1000, 2) . " ms");
         $output->writeln("Maximum execution time: " . number_format($maxTime * 1000, 2) . " ms");
         $output->writeln("Average rows returned: " . number_format($avgRows, 1));
-        
+
         if (count($totalTimes) > 1) {
             $variance = 0;
             foreach ($totalTimes as $time) {
