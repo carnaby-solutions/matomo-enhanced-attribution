@@ -4,7 +4,7 @@
     "version": "1.1.0",
     "theme": false,
     "require": {
-        "matomo": ">≤5.0.0,<6.0.0",
+        "matomo": ">=5.0.0,<6.0.0",
         "php": ">=7.3.5"
     },
     "authors": [
