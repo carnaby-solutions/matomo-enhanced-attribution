@@ -1,0 +1,19 @@
+{
+    "EnhancedAttribution": {
+        "GoalUrls": "Enhanced Goal URLs with Attribution Data",
+        "Konverteringefterkanal": "Conversions by Channel",
+        "LastVisitsByBrowser": "Last Visits By Browser",
+        "visitor_count_visits": "Visit Count",
+        "visitor_returning": "Visitor Type",
+        "location_country": "Country",
+        "location_city": "City",
+        "config_os": "Operating System",
+        "config_browser_name": "Browser",
+        "config_device_type": "Device Type"
+    },
+    "EnhancedAttribution_Reports": "Enhanced Attribution",
+    "EnhancedAttribution_GoalUrls": "Goal URLs with Attribution",
+    "Goals": {
+        "GoalUrls": "Conversion URLs"
+    }
+}

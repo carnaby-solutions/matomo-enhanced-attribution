@@ -1,0 +1,19 @@
+{
+    "EnhancedAttribution": {
+        "GoalUrls": "Förbättrade mål-URLer med attribuitionsdata",
+        "Konverteringefterkanal": "Konverteringar per kanal",
+        "LastVisitsByBrowser": "Senaste besök per webbläsare",
+        "visitor_count_visits": "Antal besök",
+        "visitor_returning": "Besökartyp",
+        "location_country": "Land",
+        "location_city": "Stad",
+        "config_os": "Operativsystem",
+        "config_browser_name": "Webbläsare",
+        "config_device_type": "Enhetstyp"
+    },
+    "EnhancedAttribution_Reports": "Förbättrad attribuering",
+    "EnhancedAttribution_GoalUrls": "Mål-URLer med attribuering",
+    "Goals": {
+        "GoalUrls": "Konverterande urlar"
+    }
+}
