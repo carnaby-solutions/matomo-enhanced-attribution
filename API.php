@@ -57,12 +57,15 @@ class API extends \Piwik\Plugin\API
             $endDate = $oPeriod->getDateEnd();
         } else { // if the range includes the last N periods or is a multiple period
             if (!$isMultiplePeriod) {
-                list($date, $lastN) = EvolutionViz::getDateRangeAndLastN($period, $date, $lastN);
+                // For multiple periods, use the range directly
+                $oPeriod = Period\Factory::build($period, Date::factory($date));
+                $startDate = $oPeriod->getDateStart();
+                $endDate = $oPeriod->getDateEnd();
+            } else {
+                list($startDate, $endDate) = explode(',', $date);
+                $startDate = Date::factory($startDate);
+                $endDate = Date::factory($endDate);
             }
-            list($startDate, $endDate) = explode(',', $date);
-
-            $startDate = Date::factory($startDate);
-            $endDate = Date::factory($endDate);
         }
         return [$startDate, $endDate];
     }
