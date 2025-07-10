@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  EnhancedAttribution.php
  *
@@ -12,13 +13,10 @@ namespace Piwik\Plugins\EnhancedAttribution;
 
 use Piwik\Plugins\EnhancedAttribution\Commands\TestGoalUrlsPerformance;
 
-
 /**/
 
 class EnhancedAttribution extends \Piwik\Plugin
-
 {
-
     /**
      * Register plugin events
      *
