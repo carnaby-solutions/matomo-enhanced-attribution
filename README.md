@@ -8,7 +8,7 @@ Ever wondered what part of the site converts best? Or what combination of conten
 valuable visitors?
 
 The Enhanced Attribution plugin for Matomo provides insights into goal conversions by combining goal URLs
-with visitor (device type & location) and traffic source data (source, medium, campaign.
+with visitor (device type & location) and traffic source data (source, medium, campaign).
 
 Fetch the data via Matomo's API for detailed analysis or view the web report for quick insights.
 
