@@ -1,6 +1,6 @@
 {
     "name": "EnhancedAttribution",
-    "description": "Enhanced attribution tracking with goal URL analysis",
+    "description": "Enhanced attribution tracking with goal URL analysis.",
     "version": "1.1.0",
     "theme": false,
     "require": {
@@ -24,6 +24,6 @@
     "keywords": ["attribution", "goal", "url", "analysis", "tracking","conversion","marketing","analytics"],
     "category": "insights",
     "archive": {
-       "exclude": ["/dev", "/test.log"]
+       "exclude": ["/dev", "/test.log", "/.php-cs-fixer.php",  "/composer.json", "/phpstan.neon"]
     }
 }
