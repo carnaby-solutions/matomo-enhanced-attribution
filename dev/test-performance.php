@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Direct performance test script for EnhancedAttribution Goal URLs
- * 
+ *
  * Usage: php test-performance.php [--idsite=1] [--date=2025-05-15] [--iterations=3]
  */
 
@@ -48,56 +49,58 @@ $results = [];
 
 for ($i = 1; $i <= $options['iterations']; $i++) {
     echo "Iteration $i/{$options['iterations']}\n";
-    
+
     // Memory usage before
     $memoryBefore = memory_get_usage(true);
     $peakBefore = memory_get_peak_usage(true);
-    
+
     // Time the API call
     $startTime = microtime(true);
-    
+
     try {
         $result = $api->getGoalUrlsDetailed(
-            (int) $options['idsite'], 
-            $options['period'], 
-            $options['date'], 
+            (int) $options['idsite'],
+            $options['period'],
+            $options['date'],
             $options['segment']
         );
         $endTime = microtime(true);
-        
+
         $executionTime = $endTime - $startTime;
         $totalTimes[] = $executionTime;
-        
+
         // Memory usage after
         $memoryAfter = memory_get_usage(true);
         $peakAfter = memory_get_peak_usage(true);
-        
+
         $rowCount = $result->getRowsCount();
         $results[] = $rowCount;
-        
+
         echo "  ✓ Execution time: " . number_format($executionTime * 1000, 2) . " ms\n";
         echo "  ✓ Rows returned: $rowCount\n";
         echo "  ✓ Memory used: " . formatBytes($memoryAfter - $memoryBefore) . "\n";
         echo "  ✓ Peak memory: " . formatBytes($peakAfter - $peakBefore) . "\n";
-        
+
         // Show first few URLs for verification
         if ($i === 1 && $rowCount > 0) {
             echo "  Sample URLs:\n";
             $sampleCount = min(3, $rowCount);
             foreach ($result->getRows() as $index => $row) {
-                if ($index >= $sampleCount) break;
+                if ($index >= $sampleCount) {
+                    break;
+                }
                 $columns = $row->getColumns();
                 echo "    - " . ($columns['conversion_url'] ?? 'N/A') . "\n";
             }
         }
-        
+
     } catch (Exception $e) {
         echo "  ✗ Error: " . $e->getMessage() . "\n";
         exit(1);
     }
-    
+
     echo "\n";
-    
+
     // Small delay between iterations
     if ($i < $options['iterations']) {
         usleep(100000); // 100ms delay
