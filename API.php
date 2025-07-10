@@ -15,8 +15,6 @@ use Piwik\Period;
 use Piwik\Common;
 use Piwik\Db;
 use Piwik\Segment;
-use Piwik\Archive;
-use Piwik\Plugins\EnhancedAttribution\RecordBuilders\GoalUrlAggregator;
 
 /**
  * API for plugin EnhancedAttribution
@@ -25,11 +23,6 @@ use Piwik\Plugins\EnhancedAttribution\RecordBuilders\GoalUrlAggregator;
  */
 class API extends \Piwik\Plugin\API
 {
-
-
-
-#http://web/index.php?module=API&action=index&date=2022-07-12&period=day&idSite=1#?period=month&date=2022-07-12&idSite=1&category=Goals_Goals&subcategory=Goals_GoalUrls
-#    http://web/index.php?module=API&method=EnhancedAttribution.getAnswerToLife.
 
 
     /**
@@ -86,12 +79,7 @@ class API extends \Piwik\Plugin\API
      */
     public function getGoalUrlsDetailed($idSite, $period, $date, $segment = false, $limit = 0)
     {
-        // Use Archive to get pre-processed data if segments are involved
-        if (!empty($segment)) {
-            // For segments, use the archived aggregated data which properly handles segmentation
-            return $this->getGoalUrlsAggregate($idSite, $period, $date, $segment);
-        }
-
+ 
         list($startDate, $endDate) = $this->getDateRangeForPeriod($date, $period, false);
         $startDateStr = $startDate->toString();
         $endDateStr = $endDate->toString();
@@ -130,14 +118,18 @@ class API extends \Piwik\Plugin\API
                 ORDER BY c.server_time DESC' . ($limit > 0 ? ' LIMIT ' . (int)$limit : '');
 
         $bind = array($idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59');
+ 
+
+
         $rows = Db::fetchAll($sql, $bind);
+
 
 
         $sql =  'SELECT idgoal, name, idsite FROM '
             .  Common::prefixTable('goal') . " WHERE idsite = ? ";
 
         $goalData= Db::fetchAll($sql, array($idSite));
-        #print_r($goalData);
+        # print_r($goalData);
         $goals = array();
         foreach ($goalData as $sepGoal) {
             $goals[$sepGoal['idgoal']] = $sepGoal['name'];
@@ -203,7 +195,7 @@ class API extends \Piwik\Plugin\API
                 'config_device_type' => $row['config_device_type'] ?? ''
             );
 
-#            print_r($returnData);
+#           print_r($returnData);
 
 
             $table->addRowFromArray(array(Row::COLUMNS => $returnData));
@@ -226,88 +218,4 @@ class API extends \Piwik\Plugin\API
         return $table;
     }
 
-    /**
-     * Get aggregated goal URLs data from archived records
-     * 
-     * @param int    $idSite
-     * @param string $period
-     * @param string $date
-     * @param bool|string $segment
-     * @return DataTable
-     */
-    public function getGoalUrlsAggregate($idSite, $period, $date, $segment = false)
-    {
-        $archive = Archive::build($idSite, $period, $date, $segment);
-        $dataTable = $archive->getDataTable(GoalUrlAggregator::GOAL_URLS_AGGREGATE_RECORD_NAME);
-        
-        return $dataTable;
-    }
-
-    /**
-     * Get goal URLs aggregated by channel
-     * 
-     * @param int    $idSite
-     * @param string $period
-     * @param string $date
-     * @param bool|string $segment
-     * @return DataTable
-     */
-    public function getGoalUrlsByChannel($idSite, $period, $date, $segment = false)
-    {
-        $archive = Archive::build($idSite, $period, $date, $segment);
-        $dataTable = $archive->getDataTable(GoalUrlAggregator::GOAL_URLS_BY_CHANNEL_RECORD_NAME);
-        
-        return $dataTable;
-    }
-
-    /**
-     * Get goal URLs aggregated by source
-     * 
-     * @param int    $idSite
-     * @param string $period
-     * @param string $date
-     * @param bool|string $segment
-     * @return DataTable
-     */
-    public function getGoalUrlsBySource($idSite, $period, $date, $segment = false)
-    {
-        $archive = Archive::build($idSite, $period, $date, $segment);
-        $dataTable = $archive->getDataTable(GoalUrlAggregator::GOAL_URLS_BY_SOURCE_RECORD_NAME);
-        
-        return $dataTable;
-    }
-
-    /**
-     * Get total goal conversions count
-     * 
-     * @param int    $idSite
-     * @param string $period
-     * @param string $date
-     * @param bool|string $segment
-     * @return int
-     */
-    public function getTotalGoalConversions($idSite, $period, $date, $segment = false)
-    {
-        $archive = Archive::build($idSite, $period, $date, $segment);
-        $value = $archive->getNumeric('EnhancedAttribution_total_goal_conversions');
-        
-        return (int) $value;
-    }
-
-    /**
-     * Get unique goal URLs count
-     * 
-     * @param int    $idSite
-     * @param string $period
-     * @param string $date
-     * @param bool|string $segment
-     * @return int
-     */
-    public function getUniqueGoalUrls($idSite, $period, $date, $segment = false)
-    {
-        $archive = Archive::build($idSite, $period, $date, $segment);
-        $value = $archive->getNumeric('EnhancedAttribution_unique_goal_urls');
-        
-        return (int) $value;
-    }
 }
