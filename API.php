@@ -1,4 +1,5 @@
 <?php
+
 /**
  *  Enhanced Attribution API
  *
@@ -24,8 +25,6 @@ use Piwik\Segment;
  */
 class API extends \Piwik\Plugin\API
 {
-
-
     /**
      * Returns start & end dates for the range described by a period and optional lastN
      * argument.
@@ -42,7 +41,7 @@ class API extends \Piwik\Plugin\API
     {
         $lastN = false;
         if ($date === false) {
-            return array(false, false);
+            return [false, false];
         }
 
         $isMultiplePeriod = Period\Range::isMultiplePeriod($date, $period);
@@ -52,7 +51,7 @@ class API extends \Piwik\Plugin\API
             $oPeriod = new Period\Range('day', $date);
             $startDate = $oPeriod->getDateStart();
             $endDate = $oPeriod->getDateEnd();
-        } else if ($lastN == false && !$isMultiplePeriod) {
+        } elseif ($lastN == false && !$isMultiplePeriod) {
             $oPeriod = Period\Factory::build($period, Date::factory($date));
             $startDate = $oPeriod->getDateStart();
             $endDate = $oPeriod->getDateEnd();
@@ -65,7 +64,7 @@ class API extends \Piwik\Plugin\API
             $startDate = Date::factory($startDate);
             $endDate = Date::factory($endDate);
         }
-        return array($startDate, $endDate);
+        return [$startDate, $endDate];
     }
 
 
@@ -118,7 +117,7 @@ class API extends \Piwik\Plugin\API
                   AND c.server_time <= ?
                 ORDER BY c.server_time DESC' . ($limit > 0 ? ' LIMIT ' . (int)$limit : '');
 
-        $bind = array($idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59');
+        $bind = [$idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59'];
 
 
         $rows = Db::fetchAll($sql, $bind);
@@ -127,24 +126,24 @@ class API extends \Piwik\Plugin\API
         $sql = 'SELECT idgoal, name, idsite FROM '
             . Common::prefixTable('goal') . " WHERE idsite = ? ";
 
-        $goalData = Db::fetchAll($sql, array($idSite));
+        $goalData = Db::fetchAll($sql, [$idSite]);
         # print_r($goalData);
-        $goals = array();
+        $goals = [];
         foreach ($goalData as $sepGoal) {
             $goals[$sepGoal['idgoal']] = $sepGoal['name'];
 
         }
-#        print_r($goals);
+        #        print_r($goals);
         $table = new DataTable();
 
         // Cache channel matrix outside loop for performance
-        $channelMatrix = array(
+        $channelMatrix = [
             Common::REFERRER_TYPE_DIRECT_ENTRY => 'direct',
             Common::REFERRER_TYPE_SEARCH_ENGINE => 'search',
             Common::REFERRER_TYPE_CAMPAIGN => 'campaign',
             Common::REFERRER_TYPE_SOCIAL_NETWORK => 'social',
             Common::REFERRER_TYPE_WEBSITE => 'website',
-        );
+        ];
 
         foreach ($rows as $row) {
             // Optimize: only populate fields that have data, avoid massive empty array initialization
@@ -172,7 +171,7 @@ class API extends \Piwik\Plugin\API
                     break;
             }
 
-            $returnData = array(
+            $returnData = [
                 'conversion_url' => $row['url'],
                 'channel' => $channelMatrix[$row['referer_type']] ?? 'unknown',
                 'source' => $source,
@@ -192,9 +191,9 @@ class API extends \Piwik\Plugin\API
                 'config_os' => $row['config_os'] ?? '',
                 'config_browser_name' => $row['config_browser_name'] ?? '',
                 'config_device_type' => $row['config_device_type'] ?? ''
-            );
+            ];
 
-            $table->addRowFromArray(array(Row::COLUMNS => $returnData));
+            $table->addRowFromArray([Row::COLUMNS => $returnData]);
         }
 
         return $table;
