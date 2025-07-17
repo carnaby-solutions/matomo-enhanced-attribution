@@ -39,7 +39,6 @@ class API extends \Piwik\Plugin\API
      */
     public static function getDateRangeForPeriod($date, $period, $lastN = false)
     {
-        $lastN = false;
         if ($date === false) {
             return [false, false];
         }
@@ -47,11 +46,11 @@ class API extends \Piwik\Plugin\API
         $isMultiplePeriod = Period\Range::isMultiplePeriod($date, $period);
 
         // if the range is just a normal period (or the period is a range in which case lastN is ignored)
-        if ($period == 'range') {
+        if ($period === 'range') {
             $oPeriod = new Period\Range('day', $date);
             $startDate = $oPeriod->getDateStart();
             $endDate = $oPeriod->getDateEnd();
-        } elseif ($lastN == false && !$isMultiplePeriod) {
+        } elseif ($lastN === false && !$isMultiplePeriod) {
             $oPeriod = Period\Factory::build($period, Date::factory($date));
             $startDate = $oPeriod->getDateStart();
             $endDate = $oPeriod->getDateEnd();
@@ -62,9 +61,12 @@ class API extends \Piwik\Plugin\API
                 $startDate = $oPeriod->getDateStart();
                 $endDate = $oPeriod->getDateEnd();
             } else {
-                list($startDate, $endDate) = explode(',', $date);
-                $startDate = Date::factory($startDate);
-                $endDate = Date::factory($endDate);
+                $dateParts = explode(',', $date);
+                if (count($dateParts) !== 2) {
+                    return [false, false];
+                }
+                $startDate = Date::factory($dateParts[0]);
+                $endDate = Date::factory($dateParts[1]);
             }
         }
         return [$startDate, $endDate];
@@ -84,6 +86,11 @@ class API extends \Piwik\Plugin\API
     {
 
         list($startDate, $endDate) = $this->getDateRangeForPeriod($date, $period, false);
+
+        if ($startDate === false || $endDate === false) {
+            return new DataTable();
+        }
+
         $startDateStr = $startDate->toString();
         $endDateStr = $endDate->toString();
 

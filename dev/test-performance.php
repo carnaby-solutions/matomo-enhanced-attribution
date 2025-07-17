@@ -28,10 +28,35 @@ $options = [
 
 foreach ($argv as $arg) {
     if (strpos($arg, '--') === 0) {
-        list($key, $value) = explode('=', substr($arg, 2), 2);
-        if (isset($options[$key])) {
-            $options[$key] = $value;
+        $argParts = explode('=', substr($arg, 2), 2);
+        if (count($argParts) === 2) {
+            list($key, $value) = $argParts;
+            if (isset($options[$key])) {
+                // Validate numeric arguments
+                if (in_array($key, ['idsite', 'iterations'], true)) {
+                    if (!is_numeric($value) || $value < 1) {
+                        echo "Error: $key must be a positive integer\n";
+                        exit(1);
+                    }
+                    $options[$key] = (int) $value;
+                } else {
+                    $options[$key] = $value;
+                }
+            }
         }
+    }
+}
+
+function formatBytes($bytes)
+{
+    if ($bytes >= 1073741824) {
+        return number_format($bytes / 1073741824, 2) . ' GB';
+    } elseif ($bytes >= 1048576) {
+        return number_format($bytes / 1048576, 2) . ' MB';
+    } elseif ($bytes >= 1024) {
+        return number_format($bytes / 1024, 2) . ' KB';
+    } else {
+        return $bytes . ' bytes';
     }
 }
 
@@ -154,17 +179,4 @@ if ($avgTime > 0.5) {
     }
     echo "- Check database indexes on log_conversion and log_visit tables\n";
     echo "- Consider caching results for frequently accessed data\n";
-}
-
-function formatBytes($bytes)
-{
-    if ($bytes >= 1073741824) {
-        return number_format($bytes / 1073741824, 2) . ' GB';
-    } elseif ($bytes >= 1048576) {
-        return number_format($bytes / 1048576, 2) . ' MB';
-    } elseif ($bytes >= 1024) {
-        return number_format($bytes / 1024, 2) . ' KB';
-    } else {
-        return $bytes . ' bytes';
-    }
 }

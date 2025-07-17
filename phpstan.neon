@@ -1,0 +1,10 @@
+parameters:
+    level: 7
+    paths:
+        - API.php
+        - EnhancedAttribution.php
+        - Commands
+        - Reports
+    excludePaths:
+        - vendor
+        - dev
