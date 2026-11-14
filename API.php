@@ -29,45 +29,26 @@ class API extends \Piwik\Plugin\API
      * Returns start & end dates for the range described by a period and optional lastN
      * argument.
      *
-     * @param string|bool $date The start date of the period (or the date range of a range
-     *                           period).
-     * @param string $period The period type ('day', 'week', 'month', 'year' or 'range').
-     * @param bool|int $lastN Whether to include the last N periods in the range or not.
-     *                         Ignored if period == range.
+     * Handles single periods (date=2025-05-15), ranges (period=range&date=2025-05-01,2025-05-31)
+     * and multiple periods (date=last7, date=previous30, date=2025-05-01,2025-05-31).
      *
-     * @return Date[]   array of Date objects or array(false, false)
+     * @param string $date
+     * @param string $period The period type ('day', 'week', 'month', 'year' or 'range').
+     * @param mixed $lastN Not used, kept for backwards compatibility.
+     *
+     * @return Date[] [start, end]
      */
     public static function getDateRangeForPeriod($date, $period, $lastN = false)
     {
-        $lastN = false;
-        if ($date === false) {
-            return [false, false];
-        }
-
-        $isMultiplePeriod = Period\Range::isMultiplePeriod($date, $period);
-
-        // if the range is just a normal period (or the period is a range in which case lastN is ignored)
         if ($period == 'range') {
             $oPeriod = new Period\Range('day', $date);
-            $startDate = $oPeriod->getDateStart();
-            $endDate = $oPeriod->getDateEnd();
-        } elseif ($lastN == false && !$isMultiplePeriod) {
+        } elseif (Period::isMultiplePeriod($date, $period)) {
+            $oPeriod = new Period\Range($period, $date);
+        } else {
             $oPeriod = Period\Factory::build($period, Date::factory($date));
-            $startDate = $oPeriod->getDateStart();
-            $endDate = $oPeriod->getDateEnd();
-        } else { // if the range includes the last N periods or is a multiple period
-            if (!$isMultiplePeriod) {
-                // For multiple periods, use the range directly
-                $oPeriod = Period\Factory::build($period, Date::factory($date));
-                $startDate = $oPeriod->getDateStart();
-                $endDate = $oPeriod->getDateEnd();
-            } else {
-                list($startDate, $endDate) = explode(',', $date);
-                $startDate = Date::factory($startDate);
-                $endDate = Date::factory($endDate);
-            }
         }
-        return [$startDate, $endDate];
+
+        return [$oPeriod->getDateStart(), $oPeriod->getDateEnd()];
     }
 
 
