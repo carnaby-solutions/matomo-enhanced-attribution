@@ -4,7 +4,7 @@
  *  EnhancedAttribution.php
  *
  * Enhanced attribution tracking and goal URL analysis
- * @link https://www.carnaby.se/matomo/plugins/enhancedattribution/
+ * @link https://carnaby.solutions/enhanced-attribution-matomo-plugin/
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  */

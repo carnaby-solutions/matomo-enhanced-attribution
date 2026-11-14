@@ -1,6 +1,6 @@
 # Matomo EnhancedAttribution Plugin
 
-https://www.carnaby.se/matomo-enhanced-attribution/
+https://carnaby.solutions/enhanced-attribution-matomo-plugin/ (English) · https://www.carnaby.se/matomo-enhanced-attribution/ (Svenska)
 
 ## Description
 
@@ -11,6 +11,10 @@ The Enhanced Attribution plugin for Matomo provides insights into goal conversio
 with visitor (device type & location) and traffic source data (source, medium, campaign).
 
 Fetch the data via Matomo's API for detailed analysis or view the web report for quick insights.
+
+Requires the free [MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) plugin.
+
+More about the plugin: [English](https://carnaby.solutions/enhanced-attribution-matomo-plugin/) · [Svenska](https://www.carnaby.se/matomo-enhanced-attribution/)
 
 ### Features
 
