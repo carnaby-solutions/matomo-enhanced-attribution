@@ -1,5 +1,7 @@
 ## Documentation
 
+Plugin page: [English](https://carnaby.solutions/enhanced-attribution-matomo-plugin/) · [Svenska](https://www.carnaby.se/matomo-enhanced-attribution/)
+
 ### Requirements
 
 - Matomo 6 (for Matomo 5, use version 1.x)
