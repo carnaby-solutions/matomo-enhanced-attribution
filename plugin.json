@@ -20,7 +20,7 @@
         "issues": "https://github.com/carnaby-solutions/matomo-enhanced-attribution/issues",
         "source": "https://github.com/carnaby-solutions/matomo-enhanced-attribution"
     },
-    "homepage": "https://www.carnaby.se/matomo-enhanced-attribution/",
+    "homepage": "https://carnaby.solutions/enhanced-attribution-matomo-plugin/",
     "license": "GPL-3.0+",
     "keywords": ["attribution", "goal", "url", "analysis", "tracking","conversion","marketing","analytics"],
     "category": "insights",
