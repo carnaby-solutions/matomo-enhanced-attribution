@@ -16,6 +16,7 @@ use Piwik\Date;
 use Piwik\Period;
 use Piwik\Common;
 use Piwik\Db;
+use Piwik\Piwik;
 use Piwik\Segment;
 
 /**
@@ -63,6 +64,8 @@ class API extends \Piwik\Plugin\API
      */
     public function getGoalUrlsDetailed($idSite, $period, $date, $segment = false, $limit = 0)
     {
+        $idSite = (int) $idSite;
+        Piwik::checkUserHasViewAccess($idSite);
 
         list($startDate, $endDate) = $this->getDateRangeForPeriod($date, $period, false);
         $startDateStr = $startDate->toString();
@@ -74,37 +77,47 @@ class API extends \Piwik\Plugin\API
             $limit = $filterLimit;
         }
 
-        // FASTER: Remove rarely used fields for additional performance gain
-        $sql = 'SELECT 
-                    c.idgoal, 
-                    c.idvisit, 
-                    c.server_time, 
-                    CONV(HEX(c.idvisitor), 16, 16) AS visitorId,
-                    c.url, 
-                    c.referer_name, 
-                    c.referer_type, 
-                    c.campaign_medium, 
-                    c.campaign_source,
-                    v.visitor_count_visits,
-                    v.visitor_returning,
-                    v.location_country,
-                    v.location_city,
-                    v.config_os,
-                    v.config_browser_name,
-                    v.config_device_type
-                FROM ' . Common::prefixTable('log_conversion') . ' c
-                INNER JOIN ' . Common::prefixTable('log_visit') . ' v ON c.idvisit = v.idvisit
-                WHERE c.idsite = ? 
-                  AND c.url IS NOT NULL 
-                  AND c.url != ""
-                  AND c.server_time >= ? 
-                  AND c.server_time <= ?
-                ORDER BY c.server_time DESC' . ($limit > 0 ? ' LIMIT ' . (int)$limit : '');
+        // buster is only needed for the GROUP BY (Matomo 6 wraps action segments in a subquery)
+        $select = 'log_conversion.idgoal,
+                    log_conversion.idvisit,
+                    log_conversion.buster,
+                    log_conversion.server_time,
+                    CONV(HEX(log_conversion.idvisitor), 16, 16) AS visitorId,
+                    log_conversion.url,
+                    log_conversion.referer_name,
+                    log_conversion.referer_type,
+                    log_conversion.campaign_medium,
+                    log_conversion.campaign_source,
+                    log_visit.visitor_count_visits,
+                    log_visit.visitor_returning,
+                    log_visit.location_country,
+                    log_visit.location_city,
+                    log_visit.config_os,
+                    log_visit.config_browser_name,
+                    log_visit.config_device_type';
+
+        $where = 'log_conversion.idsite = ?
+                  AND log_conversion.url IS NOT NULL
+                  AND log_conversion.url != ""
+                  AND log_conversion.server_time >= ?
+                  AND log_conversion.server_time <= ?';
 
         $bind = [$idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59'];
 
+        // Let Matomo build the query so segments work (joins are added as needed).
+        // Group by the conversion primary key so action segments can't duplicate rows.
+        $segmentObj = new Segment((string) $segment, [$idSite], $startDate, $endDate);
+        $query = $segmentObj->getSelectQuery(
+            $select,
+            ['log_conversion', 'log_visit'],
+            $where,
+            $bind,
+            'log_conversion.server_time DESC',
+            $segmentObj->isEmpty() ? false : 'log_conversion.idvisit, log_conversion.idgoal, log_conversion.buster',
+            $limit > 0 ? (int) $limit : 0
+        );
 
-        $rows = Db::fetchAll($sql, $bind);
+        $rows = Db::fetchAll($query['sql'], $query['bind']);
 
 
         $sql = 'SELECT idgoal, name, idsite FROM '
