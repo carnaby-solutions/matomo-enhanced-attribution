@@ -20,7 +20,7 @@ class EnhancedAttribution extends \Piwik\Plugin
     /**
      * Register plugin events
      *
-     * @return string
+     * @return array
      */
     public function registerEvents()
     {
