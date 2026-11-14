@@ -3,13 +3,16 @@
 ### Requirements
 
 - Matomo 5 (for Matomo 6, use version 2.x)
-- PHP 7.4 or higher
+- PHP 7.3.5 or higher
 - The [MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) plugin
 - MySQL/MariaDB database
 
 ### Installation
 
-Install via the [Matomo Marketplace](https://plugins.matomo.org/EnhancedAttribution) or manually:
+Install and activate [MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) first.
+Matomo won't activate EnhancedAttribution without it.
+
+Then install via the [Matomo Marketplace](https://plugins.matomo.org/EnhancedAttribution) or manually:
 
 
 1. Copy the plugin files to your Matomo installation:

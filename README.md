@@ -19,6 +19,12 @@ Fetch the data via Matomo's API for detailed analysis or view the web report for
 - **Geographic Data**: Country, region, and city information for goal conversions
 - **Technical Information**: Operating system, browser, device type, and screen resolution data
 
+## Requirements
+
+- Matomo 5 (version 2.x of this plugin is for Matomo 6)
+- The free [MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) plugin, installed and activated first.
+  We read the campaign source and medium it stores for each conversion.
+
 ## More Information
 
 Please read [the documentation](docs/index.md) for more details on how to use the plugin.

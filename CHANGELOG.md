@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.2.1 - 2026-11-14
+
+- Documentation: MarketingCampaignsReporting is required (README, installation steps, FAQ)
+
 ### 1.2.0 - 2026-11-14
 
 - Segments are now actually applied (they were silently ignored before)
