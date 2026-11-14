@@ -2,10 +2,10 @@
 
 ### Requirements
 
-- Matomo 5 (for Matomo 6, use version 2.x)
-- PHP 7.4 or higher
+- Matomo 6 (for Matomo 5, use version 1.x)
+- PHP 8.1 or higher
 - The [MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) plugin
-- MySQL/MariaDB database
+- MySQL 8.0+ or MariaDB 10.6+
 
 ### Installation
 

@@ -1,12 +1,12 @@
 {
     "name": "EnhancedAttribution",
     "description": "Enhanced attribution tracking with goal URL analysis.",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "theme": false,
     "require": {
-        "matomo": ">=5.0.0,<6.0.0-b1",
-        "php": ">=7.3.5",
-        "MarketingCampaignsReporting": ">=5.0.0"
+        "matomo": ">=6.0.0-b1,<7.0.0-b1",
+        "php": ">=8.1.0",
+        "MarketingCampaignsReporting": ">=6.0.0"
     },
     "authors": [
         {
