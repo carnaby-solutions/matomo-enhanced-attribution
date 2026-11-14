@@ -16,6 +16,7 @@ use Piwik\Date;
 use Piwik\Period;
 use Piwik\Common;
 use Piwik\Db;
+use Piwik\Piwik;
 use Piwik\Segment;
 
 /**
@@ -29,45 +30,26 @@ class API extends \Piwik\Plugin\API
      * Returns start & end dates for the range described by a period and optional lastN
      * argument.
      *
-     * @param string|bool $date The start date of the period (or the date range of a range
-     *                           period).
-     * @param string $period The period type ('day', 'week', 'month', 'year' or 'range').
-     * @param bool|int $lastN Whether to include the last N periods in the range or not.
-     *                         Ignored if period == range.
+     * Handles single periods (date=2025-05-15), ranges (period=range&date=2025-05-01,2025-05-31)
+     * and multiple periods (date=last7, date=previous30, date=2025-05-01,2025-05-31).
      *
-     * @return Date[]   array of Date objects or array(false, false)
+     * @param string $date
+     * @param string $period The period type ('day', 'week', 'month', 'year' or 'range').
+     * @param mixed $lastN Not used, kept for backwards compatibility.
+     *
+     * @return Date[] [start, end]
      */
     public static function getDateRangeForPeriod($date, $period, $lastN = false)
     {
-        $lastN = false;
-        if ($date === false) {
-            return [false, false];
-        }
-
-        $isMultiplePeriod = Period\Range::isMultiplePeriod($date, $period);
-
-        // if the range is just a normal period (or the period is a range in which case lastN is ignored)
         if ($period == 'range') {
             $oPeriod = new Period\Range('day', $date);
-            $startDate = $oPeriod->getDateStart();
-            $endDate = $oPeriod->getDateEnd();
-        } elseif ($lastN == false && !$isMultiplePeriod) {
+        } elseif (Period::isMultiplePeriod($date, $period)) {
+            $oPeriod = new Period\Range($period, $date);
+        } else {
             $oPeriod = Period\Factory::build($period, Date::factory($date));
-            $startDate = $oPeriod->getDateStart();
-            $endDate = $oPeriod->getDateEnd();
-        } else { // if the range includes the last N periods or is a multiple period
-            if (!$isMultiplePeriod) {
-                // For multiple periods, use the range directly
-                $oPeriod = Period\Factory::build($period, Date::factory($date));
-                $startDate = $oPeriod->getDateStart();
-                $endDate = $oPeriod->getDateEnd();
-            } else {
-                list($startDate, $endDate) = explode(',', $date);
-                $startDate = Date::factory($startDate);
-                $endDate = Date::factory($endDate);
-            }
         }
-        return [$startDate, $endDate];
+
+        return [$oPeriod->getDateStart(), $oPeriod->getDateEnd()];
     }
 
 
@@ -82,6 +64,8 @@ class API extends \Piwik\Plugin\API
      */
     public function getGoalUrlsDetailed($idSite, $period, $date, $segment = false, $limit = 0)
     {
+        $idSite = (int) $idSite;
+        Piwik::checkUserHasViewAccess($idSite);
 
         list($startDate, $endDate) = $this->getDateRangeForPeriod($date, $period, false);
         $startDateStr = $startDate->toString();
@@ -93,37 +77,56 @@ class API extends \Piwik\Plugin\API
             $limit = $filterLimit;
         }
 
-        // FASTER: Remove rarely used fields for additional performance gain
-        $sql = 'SELECT 
-                    c.idgoal, 
-                    c.idvisit, 
-                    c.server_time, 
-                    CONV(HEX(c.idvisitor), 16, 16) AS visitorId,
-                    c.url, 
-                    c.referer_name, 
-                    c.referer_type, 
-                    c.campaign_medium, 
-                    c.campaign_source,
-                    v.visitor_count_visits,
-                    v.visitor_returning,
-                    v.location_country,
-                    v.location_city,
-                    v.config_os,
-                    v.config_browser_name,
-                    v.config_device_type
-                FROM ' . Common::prefixTable('log_conversion') . ' c
-                INNER JOIN ' . Common::prefixTable('log_visit') . ' v ON c.idvisit = v.idvisit
-                WHERE c.idsite = ? 
-                  AND c.url IS NOT NULL 
-                  AND c.url != ""
-                  AND c.server_time >= ? 
-                  AND c.server_time <= ?
-                ORDER BY c.server_time DESC' . ($limit > 0 ? ' LIMIT ' . (int)$limit : '');
+        // buster is only needed for the GROUP BY (Matomo 6 wraps action segments in a subquery)
+        $select = 'log_conversion.idgoal,
+                    log_conversion.idvisit,
+                    log_conversion.buster,
+                    log_conversion.server_time,
+                    CONV(HEX(log_conversion.idvisitor), 16, 16) AS visitorId,
+                    log_conversion.url,
+                    log_conversion.referer_name,
+                    log_conversion.referer_type,
+                    log_conversion.campaign_medium,
+                    log_conversion.campaign_source,
+                    log_visit.visitor_count_visits,
+                    log_visit.visitor_returning,
+                    log_visit.location_country,
+                    log_visit.location_city,
+                    log_visit.config_os,
+                    log_visit.config_browser_name,
+                    log_visit.config_device_type';
+
+        $where = 'log_conversion.idsite = ?
+                  AND log_conversion.url IS NOT NULL
+                  AND log_conversion.url != ""
+                  AND log_conversion.server_time >= ?
+                  AND log_conversion.server_time <= ?';
 
         $bind = [$idSite, $startDateStr . ' 00:00:00', $endDateStr . ' 23:59:59'];
 
+        // Let Matomo build the query so segments work (joins are added as needed).
+        // Group by the conversion primary key so action segments can't duplicate rows.
+        $segmentObj = new Segment((string) $segment, [$idSite], $startDate, $endDate);
+        $limit = $limit > 0 ? (int) $limit : 0;
+        $hasSegment = !$segmentObj->isEmpty();
+        $query = $segmentObj->getSelectQuery(
+            $select,
+            ['log_conversion', 'log_visit'],
+            $where,
+            $bind,
+            'log_conversion.server_time DESC',
+            $hasSegment ? 'log_conversion.idvisit, log_conversion.idgoal, log_conversion.buster' : false,
+            // With a segment Matomo may wrap the query in a subselect and apply LIMIT there,
+            // before the outer GROUP BY de-duplicates, so limit the outer query ourselves.
+            $hasSegment ? 0 : $limit
+        );
 
-        $rows = Db::fetchAll($sql, $bind);
+        $sql = $query['sql'];
+        if ($hasSegment && $limit > 0) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+
+        $rows = Db::fetchAll($sql, $query['bind']);
 
 
         $sql = 'SELECT idgoal, name, idsite FROM '
