@@ -107,17 +107,26 @@ class API extends \Piwik\Plugin\API
         // Let Matomo build the query so segments work (joins are added as needed).
         // Group by the conversion primary key so action segments can't duplicate rows.
         $segmentObj = new Segment((string) $segment, [$idSite], $startDate, $endDate);
+        $limit = $limit > 0 ? (int) $limit : 0;
+        $hasSegment = !$segmentObj->isEmpty();
         $query = $segmentObj->getSelectQuery(
             $select,
             ['log_conversion', 'log_visit'],
             $where,
             $bind,
             'log_conversion.server_time DESC',
-            $segmentObj->isEmpty() ? false : 'log_conversion.idvisit, log_conversion.idgoal, log_conversion.buster',
-            $limit > 0 ? (int) $limit : 0
+            $hasSegment ? 'log_conversion.idvisit, log_conversion.idgoal, log_conversion.buster' : false,
+            // With a segment Matomo may wrap the query in a subselect and apply LIMIT there,
+            // before the outer GROUP BY de-duplicates, so limit the outer query ourselves.
+            $hasSegment ? 0 : $limit
         );
 
-        $rows = Db::fetchAll($query['sql'], $query['bind']);
+        $sql = $query['sql'];
+        if ($hasSegment && $limit > 0) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+
+        $rows = Db::fetchAll($sql, $query['bind']);
 
 
         $sql = 'SELECT idgoal, name, idsite FROM '
