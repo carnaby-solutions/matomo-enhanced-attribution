@@ -33,6 +33,9 @@ The report combines data from:
 | `campaign_medium` | Campaign medium | log_conversion.campaign_medium |
 | `campaign_name` | Campaign name | log_conversion.referer_name |
 
+`campaign_source` and `campaign_medium` are columns added to `log_conversion` by the
+[MarketingCampaignsReporting](https://plugins.matomo.org/MarketingCampaignsReporting) plugin, which is why it's required.
+
 #### Visitor Behavior Data
 | Column | Description | Source Table |
 |--------|-------------|--------------|
