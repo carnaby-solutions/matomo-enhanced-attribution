@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.2.3 - 2026-11-26
+
+- More FAQ: row limit, raw data and data retention, attribution, segments, exports, performance, personal data
+
 ### 1.2.2 - 2026-11-14
 
 - Plugin homepage now points to the English page, with links to both the English and Swedish pages in the description and docs
