@@ -1,6 +1,6 @@
 ## Changelog
 
-### 2.0.0 - 2026-11-14
+### 2.0.0 - 2026-11-26
 
 - Matomo 6 support. Requires Matomo 6, PHP 8.1+ and MarketingCampaignsReporting 6.x
 - Same fixes as 1.2.0 (segments, multiple-period dates, declared dependency)
