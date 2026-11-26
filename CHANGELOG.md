@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.0.1 - 2026-11-26
+
+- More FAQ: row limit, raw data and data retention, attribution, segments, exports, performance, personal data
+
 ### 2.0.0 - 2026-11-26
 
 - Matomo 6 support. Requires Matomo 6, PHP 8.1+ and MarketingCampaignsReporting 6.x
