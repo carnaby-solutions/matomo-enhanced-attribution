@@ -7,6 +7,10 @@ Two versions are maintained side by side:
 
 Both get the same fixes. The Marketplace offers the right one for your Matomo version.
 
+### Unreleased
+
+- Removed two unused keys from the translation files
+
 ### 2.0.1 / 1.2.3 - 2026-11-26
 
 - More FAQ: row limit, raw data and data retention, attribution, segments, exports, performance, personal data

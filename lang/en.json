@@ -11,8 +11,6 @@
         "config_browser_name": "Browser",
         "config_device_type": "Device Type"
     },
-    "EnhancedAttribution_Reports": "Enhanced Attribution",
-    "EnhancedAttribution_GoalUrls": "Goal URLs with Attribution",
     "Goals": {
         "GoalUrls": "Conversion URLs"
     }

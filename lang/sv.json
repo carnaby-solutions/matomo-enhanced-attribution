@@ -11,8 +11,6 @@
         "config_browser_name": "Webbläsare",
         "config_device_type": "Enhetstyp"
     },
-    "EnhancedAttribution_Reports": "Förbättrad attribuering",
-    "EnhancedAttribution_GoalUrls": "Mål-URLer med attribuering",
     "Goals": {
         "GoalUrls": "Konverterande urlar"
     }
